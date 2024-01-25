@@ -82,7 +82,7 @@ const userPost = async (
 };
 
 const userPut = async (
-  req: Request<{id: number}, {}, User>,
+  req: Request<{id: string}, {}, User>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) => {
@@ -104,7 +104,7 @@ const userPut = async (
 
     const user = req.body;
 
-    const result = await updateUser(user, req.params.id);
+    const result = await updateUser(user, Number(req.params.id));
     console.log('ITS JUST A USER PUT METHOD!');
 
     res.json(result);

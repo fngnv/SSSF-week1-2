@@ -17,7 +17,12 @@ const router = express.Router();
 router
   .route('/')
   .get(userListGet)
-  .post(userPost)
+  .post(
+    body('user_name').isString().isLength({min: 3}),
+    body('email').isString().isEmail(),
+    body('password').isString().isLength({min: 5}),
+    userPost
+  )
   .put(passport.authenticate('jwt', {session: false}), userPutCurrent)
   .delete(passport.authenticate('jwt', {session: false}), userDeleteCurrent);
 
@@ -31,6 +36,10 @@ router
   .route('/:id')
   .get(userGet)
   .put(passport.authenticate('jwt', {session: false}), userPut)
-  .delete(passport.authenticate('jwt', {session: false}), userDelete);
+  .delete(
+    passport.authenticate('jwt', {session: false}),
+    param('id').isNumeric,
+    userDelete
+  );
 
 export default router;
